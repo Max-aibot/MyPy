@@ -1,0 +1,5 @@
+Igor: 321654
+Vasiliy: 14701
+Anastasia: 65421
+Victor: 5
+Anna: 165232
