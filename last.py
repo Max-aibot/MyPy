@@ -23,7 +23,7 @@ class Game:
                 str(lis2) + '\n' +
                 str(lis3) + '\n' +
                 '_______________________')
-                ).replace(',', '').replace("'", '').replace("[", ' ').replace("]", ' ')
+        ).replace(',', '').replace("'", '').replace("[", ' ').replace("]", ' ')
 
         return f' {self.name}\n{self.card}'
 
@@ -38,18 +38,24 @@ class Game:
 
                 if self.win_count == 0:
                     print('Вы выйграли!')
+                    with open('lot_data.txt', 'a+') as data:
+                        data.write(self.name + ' 1\n')
                     return False
 
                 return i
 
             elif str(i) not in self.card.split() and chek == 'Y':
                 print('Такого числа нет в вашей карте!\nВы проиграли!')
+                with open('lot_data.txt', 'a+') as data:
+                    data.write('Computer' + ' 1\n')
                 return False
 
             elif str(i) in self.card.split() and chek != 'Y':
                 self.card = self.card.replace(' ' + str(i) + ' ', '>>' + str(i) + '<<')
                 print(self.name + '\n' + self.card)
                 print('Ошибочка!\nВы проиграли!')
+                with open('lot_data.txt', 'a+') as data:
+                    data.write('Computer' + ' 1\n')
                 return False
 
             else:
@@ -63,12 +69,6 @@ class Game:
             print('Следующий боченок: ' + str(i))
             yield i
 
-
-class Player(Game):
-    def __init__(self):
-        super().__init__()
-        self.name = 'Computer'
-
     def card_check_ai(self, i):
         if 37 == randint(1, 100):
             print('Вы выйграли!\nКомпьютер ошибся!\n(Что странно...)')
@@ -81,16 +81,43 @@ class Player(Game):
 
             if self.win_count == 0:
                 print('Вы проиграли :(\nКомпьютеру везет больше.')
+                with open('lot_data.txt', 'a+') as data:
+                    data.write(self.name + ' 1\n')
                 return False
         else:
             print(self.name + '\n' + self.card)
+
+
+class Player(Game):
+    def __init__(self):
+        super().__init__()
+        self.name = 'Computer'
 
 
 class Human(Player):
     def __init__(self):
         super().__init__()
         self.name = input('Как тебя зовут? ').title()
-        print(f'Добро пожаловать {self.name}')
+        try:
+            with open('lot_data.txt', 'x+'):
+                pass
+        except FileExistsError:
+            pass
+        with open('lot_data.txt', 'a+') as data:
+            if self.name in data.read():
+                print(f'С возвращением {self.name}!')
+                data.writelines(self.name + '\n')
+            else:
+                print(f'Добро пожаловать {self.name}')
+                data.writelines(self.name + '\n')
+
+    def get_player_stat(self):
+        with open('lot_data.txt') as data:
+            a = data.read()
+            games_played = a.count(self.name)
+            wins = a.count(self.name + ' 1')
+            pc_wins = a.count('Computer 1')
+            print(f'{self.name} сыграл {games_played} раз\nВыйграно {wins} игр\nКомпьютер выйграл {pc_wins} раз')
 
 
 """Start"""
@@ -117,5 +144,6 @@ elif start == 'Y':
             if chek_pc is False:
                 break
         z += 1
+    player_h.get_player_stat()
 else:
     print('See you...')
