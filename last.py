@@ -70,7 +70,7 @@ class Player(Game):
         self.name = 'Computer'
 
     def card_check_ai(self, i):
-        if 37 == randint(1, 10000):
+        if 37 == randint(1, 100):
             print('Вы выйграли!\nКомпьютер ошибся!\n(Что странно...)')
             return False
 
@@ -91,7 +91,6 @@ class Human(Player):
         super().__init__()
         self.name = input('Как тебя зовут? ').title()
         print(f'Добро пожаловать {self.name}')
-        self.player_card = 'You have no cards yet'
 
 
 """Start"""
