@@ -6,12 +6,13 @@ class Game:
         self.card = 'Cards are not generated... Not yet...'
         self.name = 'Game script'
         self.kegs = list(range(1, 90))
-        self.win_count = 15
+        self.win_chek = 15
 
     def gen_card(self):
         shuffle(self.kegs)
         lis1, lis2, lis3 = sorted(self.kegs[0:5]), sorted(self.kegs[5:10]), sorted(self.kegs[10:15])
-
+        """Такой странный способ генерации карточек остался от прошлых версий,
+        когда я использовал совсем другой подход. Но оно работает и поэтому здесь"""
         for i in range(4):
             lis1.insert(randint(0, 7), ' ')
             lis2.insert(randint(0, 7), ' ')
@@ -34,9 +35,9 @@ class Game:
             if str(i) in self.card.split() and chek == 'Y':
                 self.card = self.card.replace(' ' + str(i) + ' ', ' () ')
                 print(self.name + '\n' + self.card)
-                self.win_count -= 1
+                self.win_chek -= 1
 
-                if self.win_count == 0:
+                if self.win_chek == 0:
                     print('Вы выйграли!')
                     with open('lot_data.txt', 'a+') as data:
                         data.write(self.name + ' 1\n')
@@ -77,9 +78,9 @@ class Game:
         if str(i) in self.card.split():
             self.card = self.card.replace(' ' + str(i) + ' ', ' X ')
             print(self.name + '\n' + self.card)
-            self.win_count -= 1
+            self.win_chek -= 1
 
-            if self.win_count == 0:
+            if self.win_chek == 0:
                 print('Вы проиграли :(\nКомпьютеру везет больше.')
                 with open('lot_data.txt', 'a+') as data:
                     data.write(self.name + ' 1\n')
